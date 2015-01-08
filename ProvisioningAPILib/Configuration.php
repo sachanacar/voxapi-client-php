@@ -7,7 +7,7 @@
 
 class Configuration {
     //The base Uri for API calls
-    const BASEURI = 'http://api.voxbone.com/ws-voxbone';
+    const BASEURI = 'http://sandbox.voxbone.com/ws-voxbone';
 
     public static $BasicAuthUserName = "username";
     public static $BasicAuthPassword = "password";
