@@ -1,4 +1,4 @@
-Voxbone Provisioning APILib (PHP)
+Voxbone Provisioning API Library (PHP)
 =================
 
 How To Configure:
