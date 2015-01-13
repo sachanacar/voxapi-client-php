@@ -34,7 +34,7 @@ For using this SDK do the following:
     1. Open a new PHP >= 5.3 project and copy the generated PHP files in the project
        directory.
     2. Use composer (https://getcomposer.org/) to install the dependencies. Usually this can be done through a
-       context menu command "composer install".
+       context menu command "php composer.phar install".
     3. Include the ProvisioningAPILib.php file in your code where
        needed using "require_once" construct.
     4. You can now instantiate controllers and call the respective methods.
