@@ -2,8 +2,9 @@
 
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
-
 require_once('./ProvisioningAPILib.php');
+
+//Structure of the Account Balance Request
 $controller = new OrderingController(Configuration::$BasicAuthUserName, Configuration::$BasicAuthPassword);
 try{
   $response = $controller->getAccountbalance();
@@ -19,6 +20,7 @@ try{
     echo 'error code is: ', $e->getResponseCode()," ", $e->getReason();
 }
 
+//Structure of the List Country Request
 $controller = new InventoryController(Configuration::$BasicAuthUserName, Configuration::$BasicAuthPassword);
 try{
   $response = $controller->listCountry(0, 10, 'ARG');
@@ -37,6 +39,7 @@ try{
     echo 'error code is: ', $e->getResponseCode()," ", $e->getReason();
 }
 
+//Structure of the List Voice URIs Request
 $controller = new ConfigurationController(Configuration::$BasicAuthUserName, Configuration::$BasicAuthPassword);
 try{
   $response = $controller->listVoiceUri(0, 10);
@@ -55,6 +58,7 @@ try{
     echo 'error code is: ', $e->getResponseCode()," ", $e->getReason();
 }
 
+//Structure of the List Regulation Addresses Request
 $controller = new RegulationController(Configuration::$BasicAuthUserName, Configuration::$BasicAuthPassword);
 try{
   $response = $controller->listRegulationAddress(0, 10);
@@ -83,6 +87,7 @@ try{
     echo 'error code is: ', $e->getResponseCode()," ", $e->getReason();
 }
 
+//Structure of the List CDR Files Request
 $controller = new CDRsController(Configuration::$BasicAuthUserName, Configuration::$BasicAuthPassword);
 try{
   $response = $controller->listExistingFiles();
