@@ -100,6 +100,49 @@ class OrderingController {
 
         return $response->body;
     }
+    
+    /**
+     * createCart is a method that allows you to create a specific cart to add Items to.
+     * @param   string|null $customerReference    Optional parameter: This is the customer reference you wish to add to the cart.
+     * @param   string|null $description    Optional parameter: This is the description you wish to add to the cart.
+     * @return mixed response from the API call*/
+    public function createCart (
+                $customerReference, $description)
+    {
+        //the base uri for api requests
+        $queryBuilder = Configuration::BASEURI;
+
+        //prepare query string for API call
+        $queryBuilder = $queryBuilder.'/services/rest/ordering/cart/';
+
+        //validate and preprocess url
+        $queryUrl = APIHelper::cleanUrl($queryBuilder);
+
+        //prepare headers
+        $headers = array (
+            'User-Agent' => 'APIMATIC 2.0',
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json'
+        );
+
+        //prepare body
+        $body = json_encode(array("customerReference" => $customerReference, "description" => $description));
+
+        //prepare API request
+        $request = Unirest::put($queryUrl, $headers, $body, Configuration::$BasicAuthUserName, Configuration::$BasicAuthPassword);
+
+        //and invoke the API call request to fetch the response
+        $response = $request->getResponse();
+
+
+        //Error handling using HTTP status codes
+        if (($response->code < 200) || ($response->code > 206)) { //[200,206] = HTTP OK
+            throw new APIException("HTTP Response Not OK", $response->code);
+        }
+
+        return $response->body;
+
+    }
 
     /**
      * listCart is a method that allows you to list your carts and retrieve their attributes (cartIdentifier, customerReference, description), and their content (list of products - orderProducts - that are currently in the cart).
