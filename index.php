@@ -89,6 +89,19 @@ try{
     echo 'error code is: ', $e->getResponseCode()," ", $e->getReason();
 }
 
+//Structure of saveSmsLinkGroup Request
+$controller = new ConfigurationController(Configuration::$BasicAuthUserName, Configuration::$BasicAuthPassword);
+try{
+  $response = $controller->saveSmsLinkGroup("name");
+  echo "<b>removeFromCart Response var dump</b><br/><br />\n", var_dump($response);
+  echo "<br/><br/><br/>";
+  echo "<b>content</b><br/>";
+  echo "id: ".$response->id."<br/>";
+}catch (APIException $e) {
+    echo 'Caught exception: ',  $e->getMessage(), "<br/><br />\n";
+    echo 'error code is: ', $e->getResponseCode()," ", $e->getReason();
+}
+
 //Structure of the List Regulation Addresses Request
 $controller = new RegulationController(Configuration::$BasicAuthUserName, Configuration::$BasicAuthPassword);
 try{
