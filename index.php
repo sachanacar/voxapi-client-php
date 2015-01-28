@@ -38,6 +38,19 @@ try{
     echo 'error code is: ', $e->getResponseCode()," ", $e->getReason();
 }
 
+//Structure of Remove From Cart Request
+$controller = new OrderingController(Configuration::$BasicAuthUserName, Configuration::$BasicAuthPassword);
+try{
+  $response = $controller->removeFromCart("12345", "54321", 1);
+  echo "<b>removeFromCart Response var dump</b><br/><br />\n", var_dump($response);
+  echo "<br/><br/><br/>";
+  echo "<b>content</b><br/>";
+  echo "status: ".$response->messages->status."<br/>";
+}catch (APIException $e) {
+    echo 'Caught exception: ',  $e->getMessage(), "<br/><br />\n";
+    echo 'error code is: ', $e->getResponseCode()," ", $e->getReason();
+}
+
 //Structure of the List Country Request
 $controller = new InventoryController(Configuration::$BasicAuthUserName, Configuration::$BasicAuthPassword);
 try{
