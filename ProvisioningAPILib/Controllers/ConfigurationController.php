@@ -209,16 +209,16 @@ class ConfigurationController {
         return $response->body;
     }
         
-    /**
+   /**
      * saveSmsLinkGroup is a method that allows you to create an SMS link group. An SMS link group is an entity that contains one or several links. For SMS traffic coming from Voxbone to one of your DIDs, you need to link the DID to the link group so that the traffic can be routed to the appropriate destination. If several links are contained in the link group, the traffic will be load balanced according to the weight parameter defined in the links definition.
      * @param   string|null $name    Optional parameter: This is the name of the link group that you wish to create. There is no specific limitations except that the name should contain less than 255 characters.
      * @return mixed response from the API call*/
-    public function updateSaveSmsLinkGroup (
-                $name = NULL) 
+    public function saveSmsLinkGroup (
+                $name = NULL)
     {
         //the base uri for api requests
         $queryBuilder = Configuration::BASEURI;
-        
+
         //prepare query string for API call
         $queryBuilder = $queryBuilder.'/services/rest/configuration/smslinkgroup';
 
@@ -228,11 +228,17 @@ class ConfigurationController {
         //prepare headers
         $headers = array (
             'User-Agent' => 'APIMATIC 2.0',
-            'Accept' => 'application/json'
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json'
         );
 
+        //prepare body
+        $body = json_encode(array(
+            'name' => $name
+        ));
+
         //prepare API request
-        $request = Unirest::put($queryUrl, $headers, $name, Configuration::$BasicAuthUserName, Configuration::$BasicAuthPassword);
+        $request = Unirest::put($queryUrl, $headers, $body, Configuration::$BasicAuthUserName, Configuration::$BasicAuthPassword);
 
         //and invoke the API call request to fetch the response
         $response = $request->getResponse();
@@ -244,6 +250,7 @@ class ConfigurationController {
 
         return $response->body;
     }
+
         
     /**
      * listVoiceUri is a method that allows you to get the list of your Voice URIs and their details.
