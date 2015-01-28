@@ -376,7 +376,7 @@ class RegulationController {
      * requestAddressVerification is a method that allows you to request a separate address verification.
      * @param   string $regulationAddressId    Required parameter: The identifier of the regulation address.
      * @return mixed response from the API call*/
-    public function updateRequestAddressVerification (
+    public function requestAddressVerification (
                 $regulationAddressId) 
     {
         //the base uri for api requests
