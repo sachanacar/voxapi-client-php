@@ -19,6 +19,24 @@ try{
     echo 'Caught exception: ',  $e->getMessage(), "<br/>";
     echo 'error code is: ', $e->getResponseCode()," ", $e->getReason();
 }
+//Structure of the createCart Request
+$controller = new OrderingController(Configuration::$BasicAuthUserName, Configuration::$BasicAuthPassword);
+try{
+  $response = $controller->createCart("Example of a customerReference ", "Example of a description");
+  echo "<b>createCart Request var dump</b><br/><br />\n", var_dump($response);
+  echo "<br/><br/><br/>";
+  echo "<b>content</b><br/>";
+  echo "cartIdentifier: ".$response->cart->cartIdentifier."<br/>";
+  echo "customerReference: ".$response->cart->customerReference."<br/>";
+  echo "description: ".$response->cart->description."<br/>";
+  echo "dateAdded: ".$response->cart->dateAdded."<br/>";
+  echo "orderProducts: ".$response->cart->orderProducts."<br/>";
+  echo "<br/><br/><br/>";
+
+}catch (APIException $e) {
+    echo 'Caught exception: ',  $e->getMessage(), "<br/><br />\n";
+    echo 'error code is: ', $e->getResponseCode()," ", $e->getReason();
+}
 
 //Structure of the List Country Request
 $controller = new InventoryController(Configuration::$BasicAuthUserName, Configuration::$BasicAuthPassword);
