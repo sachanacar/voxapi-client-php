@@ -12,7 +12,7 @@ $controller = new OrderingController(Configuration::$BasicAuthUserName, Configur
 
 `````
 
-Additionally you need to add your credentials in the configuration.php file:
+Additionally you need to add your credentials in the Configuration.php file:
 
 ``````
 
