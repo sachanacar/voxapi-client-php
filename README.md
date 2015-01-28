@@ -40,3 +40,8 @@ For using this SDK do the following:
     4. You can now instantiate controllers and call the respective methods.
     5. index.php is a sample application that uses this library with API call examples from different modules.
 
+Contributing:
+============
+
+If you find issues or have any improvements for the library, please don't hesitate to commit and send a note to snacar@voxbone.com to explain what you tried to achieve.
+
