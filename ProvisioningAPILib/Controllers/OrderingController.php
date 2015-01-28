@@ -332,12 +332,19 @@ class OrderingController {
         return $response->body;
     }
 
-    /**
+  /**
      * addToCart is a method that allows you to add items (orderProducts) to a specific cart before checking out the cart. Different product types (DID, CAPACITY or CREDIT_PACKAGE) can be added into one single cart.
      * @param   string $cartIdentifier    Required parameter: The identifier of the cart.
+     * @param   string $didGroupId        Optional parameter: The id of the did group.
+     * @param   string $zone              Optional parameter: The channel zone type (A, B, C or WORLDWIDE).
+     * @param   string $creditPackageId   Optional parameter: valid ID for the creditPackage.
+     * @param   int $quantity             Required parameter: The amount of DIDs, zones or prepaid credits required.
+     * @param   string $didCartItem       Object.
+     * @param   string $capacityCartItem  Object.
+     * @param   string $creditPackageCartItem Object.
      * @return mixed response from the API call*/
     public function addToCart (
-                $cartIdentifier)
+                $cartIdentifier, $didGroupId = NULL, $zone = NULL, $creditPackageId = NULL, $quantity)
     {
         //the base uri for api requests
         $queryBuilder = Configuration::BASEURI;
@@ -356,11 +363,35 @@ class OrderingController {
         //prepare headers
         $headers = array (
             'User-Agent' => 'APIMATIC 2.0',
-            'Accept' => 'application/json'
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json'
         );
 
+        //Prepare body object
+        $didCartItem = (object) array(
+            'didGroupId' => $didGroupId,
+            'quantity' => $quantity
+            );
+        $capacityCartItem = (object) array(
+            'zone' => $zone,
+            'quantity' => $quantity
+            );
+        $creditPackageCartItem = (object) array(
+            'creditPackageId' => $creditPackageId,
+            'quantity' => $quantity
+            );
+
+        //prepare body
+        $body = json_encode(array(
+            "cartIdentifier" => $cartIdentifier,
+            "didCartItem" => $didCartItem,
+            "capacityCartItem" => $capacityCartItem,
+            "creditPackageCartItem" => $creditPackageCartItem
+        ));
+
         //prepare API request
-        $request = Unirest::post($queryUrl, $headers, NULL, Configuration::$BasicAuthUserName, Configuration::$BasicAuthPassword);
+        $request = Unirest::put($queryUrl, $headers, $body, Configuration::$BasicAuthUserName, Configuration::$BasicAuthPassword);
+        echo "<b>Request var dump</b><br/><br />\n", var_dump($request);
 
         //and invoke the API call request to fetch the response
         $response = $request->getResponse();
