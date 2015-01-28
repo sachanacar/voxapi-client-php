@@ -38,6 +38,16 @@ try{
     echo 'error code is: ', $e->getResponseCode()," ", $e->getReason();
 }
 
+//Structure of AddToCart Request
+$controller = new OrderingController(Configuration::$BasicAuthUserName, Configuration::$BasicAuthPassword);
+try{
+  $response = $controller->addToCart("1141", "8826", NULL, NULL, 1);
+  echo "<b>Response var dump</b><br/><br />\n", var_dump($response);
+}catch (APIException $e) {
+    echo 'Caught exception: ',  $e->getMessage(), "<br/><br />\n";
+    echo 'error code is: ', $e->getResponseCode()," ", $e->getReason();
+}
+
 //Structure of Remove From Cart Request
 $controller = new OrderingController(Configuration::$BasicAuthUserName, Configuration::$BasicAuthPassword);
 try{
