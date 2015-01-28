@@ -373,14 +373,16 @@ class OrderingController {
         return $response->body;
     }
 
-    /**
+   /**
      * Remove a product from your cart, or change the ordered quantity.
      * @param   string $cartIdentifier    Required parameter: The identifier of the cart.
      * @param   string $orderProductId    Required parameter: The identifier of the product.
+     * @param   int $quantity             Required parameter: Required quantity to be removed.
      * @return mixed response from the API call*/
-    public function createRemoveFromCart (
+    public function removeFromCart (
                 $cartIdentifier,
-                $orderProductId)
+                $orderProductId,
+                $quantity)
     {
         //the base uri for api requests
         $queryBuilder = Configuration::BASEURI;
@@ -400,11 +402,19 @@ class OrderingController {
         //prepare headers
         $headers = array (
             'User-Agent' => 'APIMATIC 2.0',
-            'Accept' => 'application/json'
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json'
         );
 
+        //prepare body
+        $body = json_encode(array(
+            'cartIdentifier' => $cartIdentifier,
+            'orderProductId' => $orderProductId,
+            'quantity' => $quantity
+        ));
+
         //prepare API request
-        $request = Unirest::post($queryUrl, $headers, NULL, Configuration::$BasicAuthUserName, Configuration::$BasicAuthPassword);
+        $request = Unirest::put($queryUrl, $headers, $body, Configuration::$BasicAuthUserName, Configuration::$BasicAuthPassword);
 
         //and invoke the API call request to fetch the response
         $response = $request->getResponse();
@@ -415,6 +425,6 @@ class OrderingController {
         }
 
         return $response->body;
-    }
 
+    }
 }
