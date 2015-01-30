@@ -368,30 +368,44 @@ class OrderingController {
         );
 
         //Prepare body object
-        $didCartItem = (object) array(
-            'didGroupId' => $didGroupId,
-            'quantity' => $quantity
-            );
-        $capacityCartItem = (object) array(
-            'zone' => $zone,
-            'quantity' => $quantity
-            );
-        $creditPackageCartItem = (object) array(
-            'creditPackageId' => $creditPackageId,
-            'quantity' => $quantity
-            );
+        function createBody($cartIdentifier, $didGroupId, $zone, $creditPackageId, $quantity)
+        {
+            if ($didGroupId == NULL)
+                $didCartItem = null;
+            else
+                $didCartItem = (object) array(
+                    'didGroupId' => $didGroupId,
+                    'quantity' => $quantity
+                );
+            if($zone == NULL)
+                $capacityCartItem = null;
+            else
+                $capacityCartItem = (object) array(
+                    'zone' => $zone,
+                    'quantity' => $quantity
+                );
+            if ($creditPackageId == NULL)
+                $creditPackageCartItem = null;
+            else
+                $creditPackageCartItem = (object) array(
+                'creditPackageId' => $creditPackageId,
+                'quantity' => $quantity
+                );
 
-        //prepare body
-        $body = json_encode(array(
-            "cartIdentifier" => $cartIdentifier,
-            "didCartItem" => $didCartItem,
-            "capacityCartItem" => $capacityCartItem,
-            "creditPackageCartItem" => $creditPackageCartItem
-        ));
+            //prepare body
+            $body = json_encode(array(
+                "cartIdentifier" => $cartIdentifier,
+                "didCartItem" => $didCartItem,
+                "capacityCartItem" => $capacityCartItem,
+                "creditPackageCartItem" => $creditPackageCartItem
+            ));
+
+            return $body;
+        }
+
 
         //prepare API request
-        $request = Unirest::put($queryUrl, $headers, $body, Configuration::$BasicAuthUserName, Configuration::$BasicAuthPassword);
-        echo "<b>Request var dump</b><br/><br />\n", var_dump($request);
+        $request = Unirest::post($queryUrl, $headers, createBody($cartIdentifier, $didGroupId, $zone, $creditPackageId, $quantity), Configuration::$BasicAuthUserName, Configuration::$BasicAuthPassword);
 
         //and invoke the API call request to fetch the response
         $response = $request->getResponse();
