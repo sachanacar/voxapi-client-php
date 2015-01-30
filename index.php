@@ -41,8 +41,11 @@ try{
 //Structure of AddToCart Request
 $controller = new OrderingController(Configuration::$BasicAuthUserName, Configuration::$BasicAuthPassword);
 try{
-  $response = $controller->addToCart("1141", "8826", NULL, NULL, 1);
+  $response = $controller->addToCart("11206", "8826", NULL, NULL, 1);
   echo "<b>Response var dump</b><br/><br />\n", var_dump($response);
+  echo "<br/><br/><br/>";
+  echo "<b>content</b><br/>";
+  echo "status: ".$response->status."<br/>";
 }catch (APIException $e) {
     echo 'Caught exception: ',  $e->getMessage(), "<br/><br />\n";
     echo 'error code is: ', $e->getResponseCode()," ", $e->getReason();
