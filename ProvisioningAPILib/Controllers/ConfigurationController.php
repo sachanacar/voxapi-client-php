@@ -30,12 +30,39 @@ class ConfigurationController {
         $this->basicAuthPassword = $basicAuthPassword;
     }
 
-    /**
+   /**
      * The applyConfiguration method is used to configure one or multiple DIDs with certain settings. The possible settings that can be configured for each DID are described below in the list of input parameters.
-     * @param   string $didIds    Required parameter: This is the list of DIDs (IDs) to be configured. Returned in checkoutCart() and listDid().
+     * @param   array $didIds                  Required parameter: This is the list of DIDs (IDs) to be configured. Returned in checkoutCart() and listDid().
+     * @param   string|null $voiceUriId         Optional parameter: This is the ID of the Voice URI on which you want to map the DIDs. If voiceUriId is null, then the DIDs will be unmapped from their previous Voice URI.
+     * @param   string|null $smsLinkGroupId     Optional parameter: This is the ID of the SMS link group on which you want to map the DIDs. If smsLinkGroupId is null, then the DIDs will be unmapped from their previous SMS link group.
+     * @param   string|null $faxUriId           Optional parameter: This is the ID of the Fax URI on which you want to map the DIDs. If faxUriId is null, then the DIDs will be unmapped from their previous Fax URI.
+     * @param   string|null $capacityGroupId    Optional parameter: This is the ID of the capacity group on which you want to map the DIDs. If capacityGroupId is null, then the DIDs will be unmapped from their previous capacity group.
+     * @param   string|null $trunkId            Optional parameter: This is the ID of the trunk (cf. listTrunk method in Inventory module) on which you want to map the DIDs. If trunkId is null, then the DIDs will be unmapped from their previous trunk.
+     * @param   string|null $deliveryId         Optional parameter: This is the ID of the POP on which you want to map the DIDs. If deliveryId is null, then the DIDs will be unmapped from their previous POP.
+     * @param   boolean|null $srvLookup         Optional parameter: Indicates whether you want to enable DNS SRV on the DID(s). While a standard DNS record maps one domain name to one IP address, a DNS SRV record maps one domain name to multiple IP addresses. When Voxbone performs a DNS SRV request on your DNS server, it selects only one of these IP addresses returned by the DNS
+     * @param   string|null $cliFormat          Optional parameter: Indicates the CLI option for the DID(s). The format can be RAW, E164, LOCALIZED and CLI_NONE. In case the format is E164 or LOCALIZED, then there should be a cliValue.
+     * @param   string|null $cliValue           Optional parameter: If the value of cliFormat is E164 then the cliValue should be “+”, “null” or a numeric string (e.g. “+123”, “+”, “123”, etc.). If the cliFormat is LOCALIZED then the cliValue should be a country code a3 (e.g. “RUS”, “FRA”, “USA”, etc.).
+     * @param   string|null $cliPrivacy         Optional parameter: this option is only available to certain Voxbone customers who are authorized to change the privacy settings on a per DID basis. Please check with your account manager if you need that option enabled. The possible values are P_ASSERTED_ID, REMOTE_PARTY_ID or DISABLED
+     * @param   boolean|null $t38Enabled        Optional parameter: Indicates whether a DID is T.38 enabled. It can be configured per DID in the configuration module using the applyConfiguration method.
+     * @param   string|null $dtmf               Optional parameter: dtmf and dtmfInbandMute indicate the current DMTF configuration for the calls on a given DID. The possible values for dtmf are INBAND, INFO, RFC2833, RFC2833_INFO, RFC2833_INBAND. For the last two values, the system will automatically choose between RFC2833 and INFO or INBAND. The standard way to carry out-of-band DTMF via SIP is as RTP payload (see RFC 2833). It has the advantage that it provides accurate timing and alignment with the speech RTP packets.
+     * @param   boolean|null $dtmfInbandMute    Optional parameter: By activating dtmfInbandMute on a number, the inband DTMF tones are removed from the audio stream. This is recommended when you add inband DTMF tones yourself to the audio stream afterwards (which can be the case for example when the call is sent back to the PSTN).
+     * @param   string|null $codecs             Optional parameter: List of codecs that are supported for the calls on a given DID. The possible values are: G711A, G711U, G729, G723.
+     * @param   string|null $ringback           Optional parameter: indicates the ringback method that is applied to the DID. The possible values are STANDARD, RINGING, PROGRESS
+     * @param   boolean|null $dnisEnabled       Optional parameter: Indicates whether the DNIS service is enabled for a given DID. When enabled, this option sends the DID's E.164 number in the To header of the SIP INVITE, while the SIP Request-URI is set to the URI you configure. This can be helpful in providing account information inside VoiceXML applications
+     * @param   boolean|null $blockOrdinary     Optional parameter: Indicates the current CPC configuration for a given DID. For toll-free numbers, it can be useful to block certain calling party categories (CPC) since the call rates can hugely differ. blockOrdinary is to block calls from fixed lines networks, blockCellular for calls from mobile networks and blockPayphone for call from payphones.
+     * @param   boolean|null $blockCellular     Optional parameter: Indicates the current CPC configuration for a given DID. For toll-free numbers, it can be useful to block certain calling party categories (CPC) since the call rates can hugely differ. blockOrdinary is to block calls from fixed lines networks, blockCellular for calls from mobile networks and blockPayphone for call from payphones.
+     * @param   boolean|null $blockPayphone     Optional parameter: Indicates the current CPC configuration for a given DID. For toll-free numbers, it can be useful to block certain calling party categories (CPC) since the call rates can hugely differ. blockOrdinary is to block calls from fixed lines networks, blockCellular for calls from mobile networks and blockPayphone for call from payphones.
+     * @param   boolean|null $smsOutbound       Optional parameter: Allows you to enable the outbound SMS service for the DID.
+     * @param   boolean|null $webRtcEnabled     Optional parameter: Allows you to enable the WebRTC service for the DID
+     * @param   string|null $peer               Optional parameter: Object containing dtmf, dtmfInbandMute, codecs
+     * @param   string|null $callerId           Optional parameter: Object containing cliFormat, cliValue
      * @return mixed response from the API call*/
-    public function createApplyConfiguration (
-                $didIds) 
+    public function applyConfiguration (
+                $didIds, $voiceUriId = NULL, $smsLinkGroupId = NULL, $faxUriId = NULL, $capacityGroupId = NULL, $trunkId = NULL, 
+                $deliveryId = NULL, $srvLookup = NULL, $cliFormat = NULL, $cliValue = NULL, $cliPrivacy = NULL, $t38Enabled = NULL, 
+                $dtmf = NULL, $dtmfInbandMute = NULL, $codecs = NULL, $ringback = NULL, $dnisEnabled = NULL, $blockOrdinary = NULL, 
+                $blockCellular = NULL, $blockPayphone = NULL, $smsOutbound = NULL, $webRtcEnabled = NULL
+            ) 
     {
         //the base uri for api requests
         $queryBuilder = Configuration::BASEURI;
@@ -49,11 +76,62 @@ class ConfigurationController {
         //prepare headers
         $headers = array (
             'User-Agent' => 'APIMATIC 2.0',
-            'Accept' => 'application/json'
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json'
         );
 
+        //prepare body
+       function createBody($didIds, $voiceUriId, $smsLinkGroupId, $faxUriId, $capacityGroupId, 
+        $trunkId, $deliveryId, $srvLookup, $cliFormat, $cliValue, $srvLookup, $cliFormat, $cliValue,
+        $cliPrivacy, $t38Enabled, $dtmf, $dtmfInbandMute, $codecs, $ringback, $dnisEnabled, $blockOrdinary, 
+        $blockCellular,$blockPayphone, $smsOutbound, $webRtcEnabled )
+
+        {
+            if ($cliFormat == NULL)
+                $callerId = null;
+            else
+                $callerId = (object) array(
+                    'cliFormat' => $cliFormat,
+                    'cliValue' => $cliValue
+                );
+            if ($t38Enabled == NULL && $dtmf == NULL && $dtmfInbandMute == NULL && $codecs == NULL)
+                $peer = null;
+            else
+                $peer = (object) array(
+                    't38Enabled' => $cliFot38Enabledrmat,
+                    'dtmf' => $dtmf,
+                    'dtmfInbandMute' => $dtmfInbandMute,
+                    'codecs' => $codecs
+                );
+
+            $body = json_encode(array(
+                "didIds" => $didIds,
+                "voiceUriId" => $voiceUriId,
+                "smsLinkGroupId" => $smsLinkGroupId,
+                "faxUriId" => $faxUriId,
+                "capacityGroupId" => $capacityGroupId,
+                "trunkId" => $trunkId,
+                "deliveryId" => $deliveryId,
+                "srvLookup" => $srvLookup,
+                "callerId" => $callerId,
+                "cliPrivacy" => $cliPrivacy,
+                "peer" => $peer,
+                "ringback" => $ringback,
+                "dnisEnabled" => $dnisEnabled,
+                "blockOrdinary" => $blockOrdinary,
+                "blockCellular" => $blockCellular,
+                "blockPayphone" => $blockPayphone,
+                "smsOutbound" => $smsOutbound,
+                "webRtcEnabled" => $webRtcEnabled
+            ));
+
+            return $body;
+        }   
         //prepare API request
-        $request = Unirest::post($queryUrl, $headers, $didIds, Configuration::$BasicAuthUserName, Configuration::$BasicAuthPassword);
+        $request = Unirest::post($queryUrl, $headers, createBody($didIds, $voiceUriId, $smsLinkGroupId, $faxUriId, $capacityGroupId, 
+        $trunkId, $deliveryId, $srvLookup, $cliFormat, $cliValue, $srvLookup, $cliFormat, $cliValue,
+        $cliPrivacy, $t38Enabled, $dtmf, $dtmfInbandMute, $codecs, $ringback, $dnisEnabled, $blockOrdinary, 
+        $blockCellular,$blockPayphone, $smsOutbound, $webRtcEnabled), Configuration::$BasicAuthUserName, Configuration::$BasicAuthPassword);
 
         //and invoke the API call request to fetch the response
         $response = $request->getResponse();
@@ -65,6 +143,7 @@ class ConfigurationController {
 
         return $response->body;
     }
+        
         
     /**
      * listFaxUri is a method that allows you to get the list of your Fax URIs and their details.
@@ -310,7 +389,117 @@ class ConfigurationController {
 
         return $response->body;
     }
-        
+    
+    /**
+     * saveVoiceUri Allows you to either create a new Voice URI or update an existing one. 
+     * If an existing voiceUriId is passed in the request, then an update will be performed. 
+     * If no faxUriId is passed, then a new Voice URI is created. 
+     * @param   string|null $voiceUriId     Optional parameter: The identifier of the voice uri.
+     * @param   string|null $backupUriId    Optional parameter: The identifier of the voice uri acting as backup.
+     * @param   string $voiceUriProtocol    Required parameter: The protocol to use with this voice uri. The only protocol currently supported for voice is SIP.
+     * @param   string $uri                 Required parameter: The actual uri where the call will be delivered.
+     * @param   string $description         Optional parameter: A human-readable description of this uri.
+     * @return mixed response from the API call*/
+
+    public function saveVoiceUri (
+                $voiceUriId = NULL, $backupUriId = NULL, $voiceUriProtocol, $uri, $description = NULL )
+    {
+        //the base uri for api requests
+        $queryBuilder = Configuration::BASEURI;
+
+        //prepare query string for API call
+        $queryBuilder = $queryBuilder.'/services/rest/configuration/voiceuri';
+
+        //validate and preprocess url
+        $queryUrl = APIHelper::cleanUrl($queryBuilder);
+
+        //prepare headers
+        $headers = array (
+            'User-Agent' => 'APIMATIC 2.0',
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json'
+        );
+
+        //prepare body
+        $voiceUri = (object) array(
+            'voiceUriId' => $voiceUriId,
+            'backupUriId' => $backupUriId,
+            'voiceUriProtocol' => $voiceUriProtocol,
+            'uri' => $uri,
+            'description' => $description,
+
+            );
+
+        $body = json_encode(array(
+            'voiceUri' => $voiceUri
+        ));
+
+        //prepare API request
+        $request = Unirest::put($queryUrl, $headers, $body, Configuration::$BasicAuthUserName, Configuration::$BasicAuthPassword);
+
+        //and invoke the API call request to fetch the response
+        $response = $request->getResponse();
+
+        //Error handling using HTTP status codes
+        if (($response->code < 200) || ($response->code > 206)) { //[200,206] = HTTP OK
+            throw new APIException("HTTP Response Not OK", $response->code);
+        }
+
+        return $response->body;
+    }
+    
+    /**
+     * saveCapacityGroup is a method that Allows you to either create a new capacity group or update an existing one. 
+     * If an existing capacityGroupId is passed in the request, then an update will be performed. 
+     * If no capacityGroupId is passed, then a new capacity group is created.
+     * @param   string|null $capacityGroupId    Optional parameter: The ID of one of your existing capacity groups. If the parameter is not in the request, then a new capacity group is created.
+     * @param   int $maximumCapacity    Required parameter: Defines the amount of channels you want to assign to the capacity group. The sum of all channels used by the DIDs linked to the capacity group cannot exceed the defined maximum capacity.
+     * @param   string $description    Required parameter: Defines the description of the capacity group.
+     * @return mixed response from the API call*/
+    public function saveCapacityGroup (
+                $capacityGroupId = NULL, $maximumCapacity, $description)
+    {
+        //the base uri for api requests
+        $queryBuilder = Configuration::BASEURI;
+
+        //prepare query string for API call
+        $queryBuilder = $queryBuilder.'/services/rest/configuration/capacitygroup';
+
+        //validate and preprocess url
+        $queryUrl = APIHelper::cleanUrl($queryBuilder);
+
+        //prepare headers
+        $headers = array (
+            'User-Agent' => 'APIMATIC 2.0',
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json'
+        );
+
+        //prepare body
+        $capacityGroup = (object) array(
+            'capacityGroupId' => $capacityGroupId,
+            'maximumCapacity' => $maximumCapacity,
+            'description' => $description
+            );
+
+        $body = json_encode(array(
+            'capacityGroup' => $capacityGroup
+        ));
+
+        //prepare API request
+        $request = Unirest::put($queryUrl, $headers, $body, Configuration::$BasicAuthUserName, Configuration::$BasicAuthPassword);
+
+        //and invoke the API call request to fetch the response
+        $response = $request->getResponse();
+
+        //Error handling using HTTP status codes
+        if (($response->code < 200) || ($response->code > 206)) { //[200,206] = HTTP OK
+            throw new APIException("HTTP Response Not OK", $response->code);
+        }
+
+        return $response->body;
+    }
+    
     /**
      * Allows you to remove one of your capacity groups.
      * @param   string $capacityGroupId    Required parameter: The identifier of the capacity group.
@@ -347,6 +536,70 @@ class ConfigurationController {
         if (($response->code < 200) || ($response->code > 206)) { //[200,206] = HTTP OK
             throw new APIException("HTTP Response Not OK", $response->code);
         }
+    }
+    
+    /**
+     * saveFaxUri is a method that allows you to either create a new Fax URI or update an existing one. 
+     * If an existing faxUriId is passed in the request, then an update will be performed. 
+     * If no faxUriId is passed, then a new Fax URI is created. 
+     * @param   string|null $faxUriId    Optional parameter: The identifier of the fax uri.
+     * @param   string $deliveryMethod    Required parameter: This is the delivery method on which you want to filter your list of Fax URIs. The possible values are SMTP and HTTP_POST.
+     * @param   string|null $faxFileFormat    Optional parameter: This is the file format on which you want to filter your list of Fax URIs. The possible values are Tiff and Pdf.
+     * @param   string|null $uri    Required parameter: This is the URI on which you want to filter your list of Fax URIs.
+     * @param   string|null $csid    Optional parameter: This to filter in/out the Fax URIs for which CSID (Called subscriber identification) is enabled.
+     * @param   string|null $subject    Optional parameter:  The content of the subject field of the email if you use SMTP as a delivery method. These parameters are not used for HTTP_POST.
+     * @param   string|null $body    Optional parameter: The content of the body field of the email if you use SMTP as a delivery method. These parameters are not used for HTTP_POST.
+     * @param   boolean|null $useHtml    Optional parameter:  a Boolean to indicate if you use HTML for the email body. This is only used in case the delivery method is SMTP
+
+
+     * @return mixed response from the API call*/
+    public function saveFaxUri (
+                $faxUriId = NULL, $deliveryMethod, $faxFileFormat = NULL, $uri, $csid = NULL, $subject = NULL, $body = NULL, $useHtml = NULL )
+    {
+        //the base uri for api requests
+        $queryBuilder = Configuration::BASEURI;
+
+        //prepare query string for API call
+        $queryBuilder = $queryBuilder.'/services/rest/configuration/faxuri';
+
+        //validate and preprocess url
+        $queryUrl = APIHelper::cleanUrl($queryBuilder);
+
+        //prepare headers
+        $headers = array (
+            'User-Agent' => 'APIMATIC 2.0',
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json'
+        );
+
+        //prepare body
+        $faxUri = (object) array(
+            'faxUriId' => $faxUriId,
+            'deliveryMethod' => $deliveryMethod,
+            'faxFileFormat' => $faxFileFormat,
+            'uri' => $uri,
+            'csid' => $csid,
+            'subject' => $subject,
+            'body' => $body,
+            'useHtml' => $useHtml
+            );
+
+        $body = json_encode(array(
+            'faxUri' => $faxUri
+        ));
+
+        //prepare API request
+        $request = Unirest::put($queryUrl, $headers, $body, Configuration::$BasicAuthUserName, Configuration::$BasicAuthPassword);
+
+        //and invoke the API call request to fetch the response
+        $response = $request->getResponse();
+
+        //Error handling using HTTP status codes
+        if (($response->code < 200) || ($response->code > 206)) { //[200,206] = HTTP OK
+            throw new APIException("HTTP Response Not OK", $response->code);
+        }
+
+        return $response->body;
     }
         
     /**
@@ -386,7 +639,83 @@ class ConfigurationController {
             throw new APIException("HTTP Response Not OK", $response->code);
         }
     }
-        
+       
+    /**
+     * saveSmsLink  is a method that allows you to create an SMS Link. An SMS link is an entity that defines the direction of the SMS connection, the protocol type, and the connection details.
+     * @param   string|null $smsLinkId             Optional parameter: The identifier of the sms link.
+     * @param   string $groupId                    Required parameter: Every SMS link must be in a link group. If you don’t need multiple groups, then you can create one single link group in which you place all your SMS links.
+     * @param   string $name                       Required parameter: This is the name of your SMS Link and should be less than 20 characters.
+     * @param   string $type                       Required parameter: This is the type (or protocol) of the SMS Link. For SMS inbound services (when direction is “FROM_VOXBONE” or “BIDIRECTIONAL”), the possible protocols are SMPP_SMSC, SMPP_ESME, SIP, SOAP (Parlay-X) and SMTP. For SMS outbound services (when direction is “TO_VOXBONE”), the possible protocols type are SMPP_SMSC or SMPP_ESME.
+     * @param   string|null $login                 Optional parameter: The login used for certain SMS link types.
+     * @param   string|null $password              Optional parameter: This is required when using SMPP or SOAP. A strong password is required with: 1 numeric, 1 upper case, 1 lower case and 1 special character. The password should be at least 8 characters (and no more than 9 characters for SMPP).
+     * @param   string $url                        Required parameter: This is the URL to which Voxbone sends the traffic to.
+     * @param   int|null $weight                Optional parameter: This parameter can be ignored for outbound links. It is useful for inbound connections on which you want to enable load balancing within a link group. A higher value means more preferred. For example if you have a link group that contains 5 connections with a weight of 1, each connection will receive one fifth of the incoming traffic.
+     * @param   string $direction                  Required parameter: This is the direction of the link: FROM_VOXBONE”, “TO_VOXBONE” or “BIDIRECTIONAL”.
+     * @param   string|null $systemType            Optional parameter: This is a free text parameter in SMPP that can be used at your own discretion. This can be ignored, left empty or you can define your own value.
+     * @param   string|null $useSSL                Optional parameter: This is used for SMPP to secure the interconnection with Voxbone.
+     * @param   int|null $monitorInterval          Optional parameter: This is a parameter (in seconds) used for SMPP default will be 60 if not specified.
+     * @param   int|null $transactionTimeout       Optional parameter: This is a parameter (in milliseconds) used for SMPP default will be 60000 if not specified.
+     * @param   string $smsLink Object.
+     * @return mixed response from the API call*/
+    public function saveSmsLink (
+                $smsLinkId = NULL, $groupId, $name, $type, $login = NULL, $password = NULL, $url, $weight = NULL, $direction, $systemType = NULL, $useSSL = NULL, $monitorInterval = NULL, $transactionTimeout = NULL )
+    {
+        //the base uri for api requests
+        $queryBuilder = Configuration::BASEURI;
+
+        //prepare query string for API call
+        $queryBuilder = $queryBuilder.'/services/rest/configuration/smslink';
+
+        //process optional query parameters
+        APIHelper::appendUrlWithTemplateParameters($queryBuilder, array (
+            'smsLinkId' => $smsLinkId,
+            ));
+
+        //validate and preprocess url
+        $queryUrl = APIHelper::cleanUrl($queryBuilder);
+
+        //prepare headers
+        $headers = array (
+            'User-Agent' => 'APIMATIC 2.0',
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json'
+        );
+
+        //prepare body
+        $smsLink = (object) array(
+            'smsLinkId' => $smsLinkId,
+            'groupId' => $groupId,
+            'name' => $name,
+            'type' => $type,
+            'login' => $login,
+            'password' => $password,
+            'url' => $url,
+            'weight' => $weight,
+            'direction' => $direction,
+            'systemType' => $systemType,
+            'useSSL' => $useSSL,
+            'monitorInterval' => $monitorInterval,
+            'transactionTimeout' => $transactionTimeout
+            );
+
+        $body = json_encode(array(
+            'smsLink' => $smsLink
+        ));
+
+        //prepare API request
+        $request = Unirest::put($queryUrl, $headers, $body, Configuration::$BasicAuthUserName, Configuration::$BasicAuthPassword);
+
+        //and invoke the API call request to fetch the response
+        $response = $request->getResponse();
+
+        //Error handling using HTTP status codes
+        if (($response->code < 200) || ($response->code > 206)) { //[200,206] = HTTP OK
+            throw new APIException("HTTP Response Not OK", $response->code);
+        }
+
+        return $response->body;
+    }
+    
     /**
      * deleteSmsLink is a method that allows you to delete an SMS link.
      * @param   string $smsLinkId    Required parameter: The identifier of the sms link.
