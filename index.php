@@ -102,6 +102,102 @@ try{
     echo 'error code is: ', $e->getResponseCode()," ", $e->getReason();
 }
 
+//Structure of applyConfiguration Request
+$controller = new ConfigurationController(Configuration::$BasicAuthUserName, Configuration::$BasicAuthPassword);
+try{
+  $didIds = array("12345", "54321", "22222", "1111");
+
+  $response = $controller->applyConfiguration($didIds, NULL, NULL, NULL, NULL, 
+        NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+        NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 
+        NULL,NULL, NULL, NULL);
+
+  echo "<b>applyConfiguration Response var dump</b><br/><br />\n", var_dump($response);
+  echo "<br/><br/><br/>";
+  echo "<b>content</b><br/>";
+  echo "configOption: ".$response->messages->configOption."<br/>";
+  echo "numberUpdated: ".$response->messages->numberUpdated."<br/>";
+  echo "<br/><br/><br/>";
+
+}catch (APIException $e) {
+    echo 'Caught exception: ',  $e->getMessage(), "<br/><br />\n";
+    echo 'error code is: ', $e->getResponseCode()," ", $e->getReason();
+}
+
+//Structure of saveCapacityGroup Request
+$controller = new ConfigurationController(Configuration::$BasicAuthUserName, Configuration::$BasicAuthPassword);
+try{
+  $response = $controller->saveCapacityGroup(NULL, 10, 'This is a sample description');
+  echo "<b>saveCapacityGroup Response var dump</b><br/><br />\n", var_dump($response);
+  echo "<br/><br/><br/>";
+  echo "<b>content</b><br/>";
+  echo "capacityGroupId: ".$response->capacityGroup->capacityGroupId."<br/>";
+  echo "maximumCapacity: ".$response->capacityGroup->maximumCapacity."<br/>";
+  echo "description: ".$response->capacityGroup->description."<br/>";
+  echo "amountOfDidsMapped: ".$response->capacityGroup->amountOfDidsMapped."<br/>";
+  echo "<br/><br/><br/>";
+
+}catch (APIException $e) {
+    echo 'Caught exception: ',  $e->getMessage(), "<br/><br />\n";
+    echo 'error code is: ', $e->getResponseCode()," ", $e->getReason();
+}
+
+//Structure of saveFaxUri Request
+$controller = new ConfigurationController(Configuration::$BasicAuthUserName, Configuration::$BasicAuthPassword);
+try{
+  $response = $controller->saveFaxUri(NULL, 'SMTP', 'Pdf', 'example@voxbone.com', NULL, 'Sample subject line', 'Sample body', NULL);
+  echo "<b>saveFaxUri Response var dump</b><br/><br />\n", var_dump($response);
+  echo "<br/><br/><br/>";
+  echo "<b>content</b><br/>";
+  echo "faxUriId: ".$response->faxUri->faxUriId."<br/>";
+  echo "deliveryMethod: ".$response->faxUri->deliveryMethod."<br/>";
+  echo "faxFileFormat: ".$response->faxUri->faxFileFormat."<br/>";
+  echo "uri: ".$response->faxUri->uri."<br/>";
+  echo "csid: ".$response->faxUri->csid."<br/>";
+  echo "subject: ".$response->faxUri->subject."<br/>";
+  echo "body: ".$response->faxUri->body."<br/>";
+  echo "useHtml: ".$response->faxUri->useHtml."<br/>";
+  echo "<br/><br/><br/>";
+
+}catch (APIException $e) {
+    echo 'Caught exception: ',  $e->getMessage(), "<br/><br />\n";
+    echo 'error code is: ', $e->getResponseCode()," ", $e->getReason();
+}
+
+//Structure of saveVoiceUri Request
+$controller = new ConfigurationController(Configuration::$BasicAuthUserName, Configuration::$BasicAuthPassword);
+try{
+  $response = $controller->saveVoiceUri(NULL, NULL, 'SIP', 'example@voxbone.com', NULL);
+  echo "<b>saveFaxUri Response var dump</b><br/><br />\n", var_dump($response);
+  echo "<br/><br/><br/>";
+  echo "<b>content</b><br/>";
+  echo "voiceUriId: ".$response->voiceUri->voiceUriId."<br/>";
+  echo "backupUriId: ".$response->voiceUri->backupUriId."<br/>";
+  echo "voiceUriProtocol: ".$response->voiceUri->voiceUriProtocol."<br/>";
+  echo "uri: ".$response->voiceUri->uri."<br/>";
+  echo "description: ".$response->voiceUri->description."<br/>";
+  echo "<br/><br/><br/>";
+
+}catch (APIException $e) {
+    echo 'Caught exception: ',  $e->getMessage(), "<br/><br />\n";
+    echo 'error code is: ', $e->getResponseCode()," ", $e->getReason();
+}
+
+//Structure of saveSmsLink Request
+$controller = new ConfigurationController(Configuration::$BasicAuthUserName, Configuration::$BasicAuthPassword);
+try{
+  $response = $controller->saveSmsLink(NULL, "1234", "Example", "SMTP", NULL, NULL, "foo@bar.com", 1, "FROM_VOXBONE", NULL, NULL, NULL, NULL);
+  echo "<b>saveSmsLink Response var dump</b><br/><br />\n", var_dump($response);
+  echo "<br/><br/><br/>";
+  echo "<b>content</b><br/>";
+  echo "smsLinkId: ".$response->smsLink->smsLinkId."<br/>";
+  echo "<br/><br/><br/>";
+
+}catch (APIException $e) {
+    echo 'Caught exception: ',  $e->getMessage(), "<br/><br />\n";
+    echo 'error code is: ', $e->getResponseCode()," ", $e->getReason();
+}
+
 //Structure of saveSmsLinkGroup Request
 $controller = new ConfigurationController(Configuration::$BasicAuthUserName, Configuration::$BasicAuthPassword);
 try{
