@@ -240,6 +240,22 @@ try{
     echo 'error code is: ', $e->getResponseCode()," ", $e->getReason();
 }
 
+//Structure of the Link Regulation Addresses Request
+$controller = new RegulationController(Configuration::$BasicAuthUserName, Configuration::$BasicAuthPassword);
+try{
+  $didIds = (array('3495978', '6829888', '6829889'));
+  $response = $controller->linkRegulationAddress('116763', $didIds);
+  echo "<b>controller linkRegulationAddresses var dump</b><br/>", var_dump($response);
+  echo "<br/><br/><br/>";
+  echo "<b>content</b><br/>";
+  echo "status: ".$response->status."<br/>";
+  echo "<br/><br/><br/>";
+
+}catch (APIException $e) {
+    echo 'Caught exception: ',  $e->getMessage(), "<br/>";
+    echo 'error code is: ', $e->getResponseCode()," ", $e->getReason();
+}
+
 //Structure of the List CDR Files Request
 $controller = new CDRsController(Configuration::$BasicAuthUserName, Configuration::$BasicAuthPassword);
 try{
