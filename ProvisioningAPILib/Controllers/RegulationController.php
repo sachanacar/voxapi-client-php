@@ -277,8 +277,6 @@ class RegulationController {
 
         //and invoke the API call request to fetch the response
         $response = $request->getResponse();
-        echo "<b>Request var dump</b><br/><br />\n", var_dump($request);
-
 
         //Error handling using HTTP status codes
         if (($response->code < 200) || ($response->code > 206)) { //[200,206] = HTTP OK
