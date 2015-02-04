@@ -237,23 +237,24 @@ class RegulationController {
 
         return $response->body;
     }
-        
+ 
     /**
      * linkRegulationAddress is a method that allows you to link one or multiple DIDs to a regulation address.
      * @param   string $regulationAddressId    Required parameter: The identifier of the regulation address.
+     * @param   string $didIds    Required parameter: This is the ID of the regulation address to which you want to link the DID.
      * @return mixed response from the API call*/
-    public function createLinkRegulationAddress (
-                $regulationAddressId) 
+    public function linkRegulationAddress (
+                $addressId, $didIds) 
     {
         //the base uri for api requests
         $queryBuilder = Configuration::BASEURI;
         
         //prepare query string for API call
-        $queryBuilder = $queryBuilder.'/services/rest/regulation/address/{regulationAddressId}/link';
+        $queryBuilder = $queryBuilder.'/services/rest/regulation/address/{addressId}/link';
 
         //process optional query parameters
         APIHelper::appendUrlWithTemplateParameters($queryBuilder, array (
-            'regulationAddressId' => $regulationAddressId,
+            'addressId' => $addressId,
             ));
 
         //validate and preprocess url
@@ -262,14 +263,22 @@ class RegulationController {
         //prepare headers
         $headers = array (
             'User-Agent' => 'APIMATIC 2.0',
-            'Accept' => 'application/json'
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json'
         );
 
+        $body = json_encode(array(
+            'didIds' => $didIds,
+            'addressId' => $addressId
+        ));
+
         //prepare API request
-        $request = Unirest::post($queryUrl, $headers, NULL, Configuration::$BasicAuthUserName, Configuration::$BasicAuthPassword);
+        $request = Unirest::post($queryUrl, $headers, $body, Configuration::$BasicAuthUserName, Configuration::$BasicAuthPassword);
 
         //and invoke the API call request to fetch the response
         $response = $request->getResponse();
+        echo "<b>Request var dump</b><br/><br />\n", var_dump($request);
+
 
         //Error handling using HTTP status codes
         if (($response->code < 200) || ($response->code > 206)) { //[200,206] = HTTP OK
