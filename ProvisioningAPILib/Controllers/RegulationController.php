@@ -24,10 +24,10 @@ class RegulationController {
     /**
      * Constructor with authentication and configuration parameters
      */
-    function __construct($basicAuthUserName, $basicAuthPassword)
+    function __construct($basicAuthUserName = NULL, $basicAuthPassword = NULL)
     {
-        $this->basicAuthUserName = $basicAuthUserName;
-        $this->basicAuthPassword = $basicAuthPassword;
+        $this->basicAuthUserName = $basicAuthUserName ? $basicAuthUserName : Configuration::$BasicAuthUserName;
+        $this->basicAuthPassword = $basicAuthPassword ? $basicAuthPassword : Configuration::$BasicAuthPassword;
     }
 
     /**
@@ -97,7 +97,7 @@ class RegulationController {
         );
 
         //prepare API request
-        $request = Unirest::get($queryUrl, $headers, NULL, Configuration::$BasicAuthUserName, Configuration::$BasicAuthPassword);
+        $request = Unirest::get($queryUrl, $headers, NULL, $this->basicAuthUserName, $this->basicAuthPassword);
 
         //and invoke the API call request to fetch the response
         $response = $request->getResponse();
@@ -147,7 +147,7 @@ class RegulationController {
         );
 
         //prepare API request
-        $request = Unirest::get($queryUrl, $headers, NULL, Configuration::$BasicAuthUserName, Configuration::$BasicAuthPassword);
+        $request = Unirest::get($queryUrl, $headers, NULL, $this->basicAuthUserName, $this->basicAuthPassword);
 
         //and invoke the API call request to fetch the response
         $response = $request->getResponse();
@@ -184,7 +184,7 @@ class RegulationController {
         );
 
         //prepare API request
-        $request = Unirest::post($queryUrl, $headers, json_encode($didIds), Configuration::$BasicAuthUserName, Configuration::$BasicAuthPassword);
+        $request = Unirest::post($queryUrl, $headers, json_encode($didIds), $this->basicAuthUserName, $this->basicAuthPassword);
 
         //and invoke the API call request to fetch the response
         $response = $request->getResponse();
@@ -225,7 +225,7 @@ class RegulationController {
         );
 
         //prepare API request
-        $request = Unirest::delete($queryUrl, $headers, NULL, Configuration::$BasicAuthUserName, Configuration::$BasicAuthPassword);
+        $request = Unirest::delete($queryUrl, $headers, NULL, $this->basicAuthUserName, $this->basicAuthPassword);
 
         //and invoke the API call request to fetch the response
         $response = $request->getResponse();
@@ -273,7 +273,7 @@ class RegulationController {
         ));
 
         //prepare API request
-        $request = Unirest::post($queryUrl, $headers, $body, Configuration::$BasicAuthUserName, Configuration::$BasicAuthPassword);
+        $request = Unirest::post($queryUrl, $headers, $body, $this->basicAuthUserName, $this->basicAuthPassword);
 
         //and invoke the API call request to fetch the response
         $response = $request->getResponse();
@@ -315,7 +315,7 @@ class RegulationController {
         );
 
         //prepare API request
-        $request = Unirest::put($queryUrl, $headers, NULL, Configuration::$BasicAuthUserName, Configuration::$BasicAuthPassword);
+        $request = Unirest::put($queryUrl, $headers, NULL, $this->basicAuthUserName, $this->basicAuthPassword);
 
         //and invoke the API call request to fetch the response
         $response = $request->getResponse();
@@ -366,7 +366,7 @@ class RegulationController {
         );
 
         //prepare API request
-        $request = Unirest::get($queryUrl, $headers, NULL, Configuration::$BasicAuthUserName, Configuration::$BasicAuthPassword);
+        $request = Unirest::get($queryUrl, $headers, NULL, $this->basicAuthUserName, $this->basicAuthPassword);
 
         //and invoke the API call request to fetch the response
         $response = $request->getResponse();
@@ -407,7 +407,7 @@ class RegulationController {
         );
 
         //prepare API request
-        $request = Unirest::put($queryUrl, $headers, NULL, Configuration::$BasicAuthUserName, Configuration::$BasicAuthPassword);
+        $request = Unirest::put($queryUrl, $headers, NULL, $this->basicAuthUserName, $this->basicAuthPassword);
 
         //and invoke the API call request to fetch the response
         $response = $request->getResponse();
