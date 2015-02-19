@@ -88,7 +88,7 @@ class OrderingController {
         );
 
         //prepare API request
-        $request = Unirest::post($queryUrl, $headers, json_encode($didIds), $this->basicAuthUserName, $this->basicAuthPassword);
+        $request = Unirest::post($queryUrl, $headers, json_encode(array('didIds' => $didIds)), $this->basicAuthUserName, $this->basicAuthPassword);
 
         //and invoke the API call request to fetch the response
         $response = $request->getResponse();
