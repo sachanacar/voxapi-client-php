@@ -24,10 +24,10 @@ class OrderingController {
     /**
      * Constructor with authentication and configuration parameters
      */
-    function __construct($basicAuthUserName, $basicAuthPassword)
+    function __construct($basicAuthUserName = NULL, $basicAuthPassword = NULL)
     {
-        $this->basicAuthUserName = $basicAuthUserName;
-        $this->basicAuthPassword = $basicAuthPassword;
+        $this->basicAuthUserName = $basicAuthUserName ? $basicAuthUserName : Configuration::$BasicAuthUserName;
+        $this->basicAuthPassword = $basicAuthPassword ? $basicAuthPassword : Configuration::$BasicAuthPassword;
     }
 
     /**
@@ -51,7 +51,7 @@ class OrderingController {
         );
 
         //prepare API request
-        $request = Unirest::get($queryUrl, $headers, NULL, Configuration::$BasicAuthUserName, Configuration::$BasicAuthPassword);
+        $request = Unirest::get($queryUrl, $headers, NULL, $this->basicAuthUserName, $this->basicAuthPassword);
 
         //and invoke the API call request to fetch the response
         $response = $request->getResponse();
@@ -88,7 +88,7 @@ class OrderingController {
         );
 
         //prepare API request
-        $request = Unirest::post($queryUrl, $headers, json_encode($didIds), Configuration::$BasicAuthUserName, Configuration::$BasicAuthPassword);
+        $request = Unirest::post($queryUrl, $headers, json_encode(array('didIds' => $didIds)), $this->basicAuthUserName, $this->basicAuthPassword);
 
         //and invoke the API call request to fetch the response
         $response = $request->getResponse();
@@ -129,7 +129,7 @@ class OrderingController {
         $body = json_encode(array("customerReference" => $customerReference, "description" => $description));
 
         //prepare API request
-        $request = Unirest::put($queryUrl, $headers, $body, Configuration::$BasicAuthUserName, Configuration::$BasicAuthPassword);
+        $request = Unirest::put($queryUrl, $headers, $body, $this->basicAuthUserName, $this->basicAuthPassword);
 
         //and invoke the API call request to fetch the response
         $response = $request->getResponse();
@@ -181,7 +181,7 @@ class OrderingController {
         );
 
         //prepare API request
-        $request = Unirest::get($queryUrl, $headers, NULL, Configuration::$BasicAuthUserName, Configuration::$BasicAuthPassword);
+        $request = Unirest::get($queryUrl, $headers, NULL, $this->basicAuthUserName, $this->basicAuthPassword);
 
         //and invoke the API call request to fetch the response
         $response = $request->getResponse();
@@ -237,7 +237,7 @@ class OrderingController {
         );
 
         //prepare API request
-        $request = Unirest::get($queryUrl, $headers, NULL, Configuration::$BasicAuthUserName, Configuration::$BasicAuthPassword);
+        $request = Unirest::get($queryUrl, $headers, NULL, $this->basicAuthUserName, $this->basicAuthPassword);
 
         //and invoke the API call request to fetch the response
         $response = $request->getResponse();
@@ -278,7 +278,7 @@ class OrderingController {
         );
 
         //prepare API request
-        $request = Unirest::delete($queryUrl, $headers, NULL, Configuration::$BasicAuthUserName, Configuration::$BasicAuthPassword);
+        $request = Unirest::delete($queryUrl, $headers, NULL, $this->basicAuthUserName, $this->basicAuthPassword);
 
         //and invoke the API call request to fetch the response
         $response = $request->getResponse();
@@ -319,7 +319,7 @@ class OrderingController {
         );
 
         //prepare API request
-        $request = Unirest::get($queryUrl, $headers, NULL, Configuration::$BasicAuthUserName, Configuration::$BasicAuthPassword);
+        $request = Unirest::get($queryUrl, $headers, NULL, $this->basicAuthUserName, $this->basicAuthPassword);
 
         //and invoke the API call request to fetch the response
         $response = $request->getResponse();
@@ -405,7 +405,7 @@ class OrderingController {
 
 
         //prepare API request
-        $request = Unirest::post($queryUrl, $headers, createBody($cartIdentifier, $didGroupId, $zone, $creditPackageId, $quantity), Configuration::$BasicAuthUserName, Configuration::$BasicAuthPassword);
+        $request = Unirest::post($queryUrl, $headers, createBody($cartIdentifier, $didGroupId, $zone, $creditPackageId, $quantity), $this->basicAuthUserName, $this->basicAuthPassword);
 
         //and invoke the API call request to fetch the response
         $response = $request->getResponse();
@@ -459,7 +459,7 @@ class OrderingController {
         ));
 
         //prepare API request
-        $request = Unirest::put($queryUrl, $headers, $body, Configuration::$BasicAuthUserName, Configuration::$BasicAuthPassword);
+        $request = Unirest::put($queryUrl, $headers, $body, $this->basicAuthUserName, $this->basicAuthPassword);
 
         //and invoke the API call request to fetch the response
         $response = $request->getResponse();
